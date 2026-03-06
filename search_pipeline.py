@@ -1,4 +1,3 @@
-# run_searching.py
 import sys
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
@@ -14,14 +13,13 @@ class CollectPipeline:
 
 def main(query):
     settings = get_project_settings()
-   # settings.set("LOG_ENABLED", False)
+    settings.set("LOG_ENABLED", False)
     settings.set("ITEM_PIPELINES", {__name__ + ".CollectPipeline": 1})
 
     process = CrawlerProcess(settings)
     process.crawl(SearchingSpider, query=query)
-    process.start()  # blocks until finished
+    process.start()  
 
-    # Simple output to stdout
     for r in results:
         print(f"{r.title}|||{r.url}")
 

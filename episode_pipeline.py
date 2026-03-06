@@ -1,4 +1,3 @@
-# run_episode.py
 import sys
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
@@ -14,7 +13,7 @@ class EpisodePipeline:
 
 def main(url):
     settings = get_project_settings()
-    # settings.set("LOG_ENABLED", False)
+    settings.set("LOG_ENABLED", False)
     settings.set("ITEM_PIPELINES", {__name__ + ".EpisodePipeline": 1})
 
     process = CrawlerProcess(settings)
