@@ -64,7 +64,7 @@ def choose_episodes(selected):
                 for ep in episode_list
             ]
             selected_episode_urls = questionary.checkbox(
-                "Select episodes (use TAB or SPACE to select multiple):",
+                "Select episodes (use SPACE to select multiple):",
                 choices=choices
             ).ask()
 
