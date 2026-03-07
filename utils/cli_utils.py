@@ -29,26 +29,36 @@ def choose_from_search():
 def choose_episodes(selected):
     episode_list = run_episode(selected["url"])
 
-    print(f"\nEpisodes for {selected['url']}:\n")
-
-    choices = [
-        questionary.Choice(
-            title=f"Episode {ep['number']}",
-            value=ep["url"]
-        )
-        for ep in episode_list
-    ]
-
-    selected_episode_urls = questionary.checkbox(
-        "Select episodes (use TAB or SPACE to select multiple):",
-        choices=choices
-    ).ask()
-
-    if not selected_episode_urls:
-        print("No episodes selected.")
+    if not episode_list:
+        print(f"No episodes found for {selected['title']}")
         return []
 
-    episode_urls = ",".join(selected_episode_urls)
+    print(f"\nEpisodes for {selected['url']}:\n")
+
+    # Only one episode? Ask confirmation instead of checkbox
+    if len(episode_list) == 1:
+        ep = episode_list[0]
+        print(f"Only one episode found: Episode {ep['number']}")
+        confirm = questionary.confirm("Download this episode?").ask()
+        if not confirm:
+            return []
+        episode_urls = ep["url"]
+
+    else:
+        choices = [
+            questionary.Choice(title=f"Episode {ep['number']}", value=ep["url"])
+            for ep in episode_list
+        ]
+        selected_episode_urls = questionary.checkbox(
+            "Select episodes (use TAB or SPACE to select multiple):",
+            choices=choices
+        ).ask()
+
+        if not selected_episode_urls:
+            print("No episodes selected.")
+            return []
+
+        episode_urls = ",".join(selected_episode_urls)
 
     downloads = run_download(episode_urls)
     return downloads
