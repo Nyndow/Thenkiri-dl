@@ -4,6 +4,9 @@ __pycache__/
 *.pyo
 *.pyd
 
+install.ps1
+install.sh
+
 # C extensions
 *.so
 
