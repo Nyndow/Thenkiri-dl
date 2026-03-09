@@ -46,6 +46,6 @@ python main.py
 ### Select the episodes you wish to download
 ![alt text](image-3.png)
 
-### Download choosing by choosing wget or aria2
+### Download by choosing wget or aria2
 
 ![alt text](image-4.png)
