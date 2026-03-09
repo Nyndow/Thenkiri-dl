@@ -40,7 +40,6 @@ coverage.xml
 .ipynb_checkpoints
 
 # Environment variables
-.env
 .env.*.local
 
 # IDE / editor settings
