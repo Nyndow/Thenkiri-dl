@@ -12,8 +12,7 @@ def download_with_aria2(url):
     try:
         subprocess.run([
             "aria2c",
-            "--dir", DOWNLOAD_PATH,          
-            "--check-certificate=false",      
+            "--dir", DOWNLOAD_PATH,              
             "-x", "16",                       
             "-s", "16",                            
             "--summary-interval=1",           
@@ -28,7 +27,6 @@ def download_with_wget(url):
         subprocess.run([
             "wget",
             "-c",  # continue if partially downloaded
-            "--no-check-certificate",
             "-P", DOWNLOAD_PATH,
             "--progress=bar:force",
             url

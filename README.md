@@ -41,11 +41,10 @@ cd src
 python main.py
 ```
 ### Search for the show
-![alt text](image.png)
+![Searching for a show](assets/search.png)
 
 ### Select the episodes you wish to download
-![alt text](image-3.png)
+![Selecting episodes](assets/select-episodes.png)
 
 ### Download by choosing wget or aria2
-
-![alt text](image-4.png)
+![Choosing download method](assets/download.png)
