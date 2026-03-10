@@ -10,11 +10,11 @@ class EpisodeSpider(scrapy.Spider):
         self.start_urls = [url]
 
     def parse(self, response):
-        episode_links = response.xpath(
-            "//a[contains(., 'Download Episode')]/@href"
+        links = response.xpath(
+            "//a[contains(., 'Download Episode') or contains(., 'Download Movie')]/@href"
         ).getall()
 
-        for i, link in enumerate(episode_links, 1):
+        for i, link in enumerate(links, 1):
             yield Episode(
                 number=i,
                 url=link

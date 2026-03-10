@@ -12,7 +12,7 @@ class CollectPipeline:
 
 def main(query):
     settings = get_project_settings()
-    settings.set("LOG_ENABLED", False)
+    settings.set("LOG_ENABLED", True)
     settings.set("ITEM_PIPELINES", {__name__ + ".CollectPipeline": 1})
 
     process = CrawlerProcess(settings)
