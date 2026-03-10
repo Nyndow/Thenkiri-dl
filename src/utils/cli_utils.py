@@ -9,7 +9,7 @@ def clear():
 def choose_from_search():
     try:
         clear()
-        query = input("Enter search term: ")
+        query = input("Search for a show: ")
         search_results = run_searching(query)
 
         if not search_results:
