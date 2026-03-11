@@ -48,3 +48,9 @@ python main.py
 
 ### Download by choosing wget or aria2
 ![Choosing download method](assets/download.png)
+
+## Disclaimer
+
+This project is created for educational purposes only.  
+I am not affiliated with Thenkiri.com.  
+Use this tool responsibly and respect the website's terms of service.
