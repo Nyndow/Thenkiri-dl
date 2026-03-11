@@ -7,11 +7,6 @@ It uses **aria2** and/or **wget** to ensure fast and reliable downloads.
 
 ---
 
-> A lightweight version should be released soon.  
-> This version was developed using **Scrapy** mainly to learn the tool.
-
----
-
 ## Features
 
 - Search shows available on **Thenkiri**
