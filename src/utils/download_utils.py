@@ -13,8 +13,8 @@ def download_with_aria2(url):
         subprocess.run([
             "aria2c",
             "--dir", DOWNLOAD_PATH,              
-            "-x", "16",                       
-            "-s", "16",                            
+            "-x", "3",                       
+            "-s", "3",                            
             "--summary-interval=1",           
             url
         ], check=True)  # raises exception if download fails
