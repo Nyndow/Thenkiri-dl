@@ -4,6 +4,8 @@ __pycache__/
 *.pyo
 *.pyd
 
+.env
+
 install.ps1
 install.sh
 
