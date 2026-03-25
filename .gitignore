@@ -42,9 +42,6 @@ coverage.xml
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
 
-# Environment variables
-.env.*.local
-
 # IDE / editor settings
 .vscode/
 .idea/
@@ -54,5 +51,3 @@ coverage.xml
 # OS files
 .DS_Store
 Thumbs.db
-
-.env
