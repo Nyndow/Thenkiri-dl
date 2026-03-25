@@ -29,6 +29,11 @@ cd Thenkiri-dl
 pip install -r requirements.txt
 ```
 
+Create a .env file at the root of the directory and add
+```bash
+DOWNLOAD_PATH=~/Videos/Thenkiri-dl
+```
+
 ## Usage
 
 ```bash 
