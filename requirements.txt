@@ -1,3 +1,6 @@
 scrapy
 questionary
 python-dotenv
+rich
+kivy
+kivymd
