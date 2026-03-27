@@ -1,7 +1,17 @@
 import os
+import logging
 import questionary
 from utils.pipeline_utils import run_searching, run_episode, run_download
 from utils.download_utils import download_with_aria2, download_with_wget
+
+LOG_PATH = os.path.expanduser(os.getenv("THENKIRI_LOG_PATH", "./logs/thenkiri.log"))
+os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    handlers=[logging.FileHandler(LOG_PATH)]
+)
+logger = logging.getLogger(__name__)
 
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
@@ -12,8 +22,12 @@ def choose_from_search():
         query = input("Search for a show: ")
         search_results = run_searching(query)
 
+        if search_results is None:
+            print("Search failed. Check logs for details.")
+            return None
+
         if not search_results:
-            print("No results found for your search.")
+            print(f"No results found for: {query}")
             return None
 
         print("\nResults:\n")
@@ -33,8 +47,8 @@ def choose_from_search():
         print(selected["url"])
         return selected
 
-    except Exception as e:
-        print(f"An error happened during search: {e}")
+    except Exception:
+        logger.exception("Error during search")
         return None
 
 def choose_episodes(selected):
@@ -43,6 +57,10 @@ def choose_episodes(selected):
 
     try:
         episode_list = run_episode(selected["url"])
+
+        if episode_list is None:
+            print("Episode lookup failed. Check logs for details.")
+            return []
 
         if not episode_list:
             print(f"No episodes found for {selected['title']}")
@@ -75,10 +93,13 @@ def choose_episodes(selected):
             episode_urls = ",".join(selected_episode_urls)
 
         downloads = run_download(episode_urls)
+        if downloads is None:
+            print("Download lookup failed. Check logs for details.")
+            return []
         return downloads
 
-    except Exception as e:
-        print(f"An error happened while selecting episodes: {e}")
+    except Exception:
+        logger.exception("Error while selecting episodes")
         return []
 
 def choose_downloader_and_start(downloads):
@@ -102,7 +123,7 @@ def choose_downloader_and_start(downloads):
         for d in downloads:
             url = d.get("download_url")
             if not url:
-                print("Invalid download URL, skipping.")
+                logger.warning("Invalid download URL, skipping.")
                 continue
 
             print(f"Downloading: {url}")
@@ -111,16 +132,16 @@ def choose_downloader_and_start(downloads):
                     download_with_aria2(url)
                 else:
                     download_with_wget(url)
-            except Exception as e:
-                print(f"Failed to download {url}: {e}")
+            except Exception:
+                logger.exception("Failed to download %s", url)
 
-    except Exception as e:
-        print(f"An error happened while choosing downloader: {e}")
+    except Exception:
+        logger.exception("Error while choosing downloader")
 
 def run_cli():
     try:
         selected = choose_from_search()
         downloads = choose_episodes(selected)
         choose_downloader_and_start(downloads)
-    except Exception as e:
-        print(f"An unexpected error happened: {e}")
+    except Exception:
+        logger.exception("Unexpected error in CLI run")

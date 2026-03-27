@@ -1,12 +1,29 @@
 import subprocess
+import logging
+import sys
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 def run_pipeline(script, arg):
+    src_dir = Path(__file__).resolve().parent.parent
+    script_path = src_dir / script
     result = subprocess.run(
-        ["python", script, arg],
+        [sys.executable, str(script_path), arg],
         capture_output=True,
-        text=True
+        text=True,
+        cwd=str(src_dir)
     )
-    return result.stdout.strip().split("\n")
+    stdout_lines = result.stdout.strip().split("\n") if result.stdout else []
+    stderr_text = result.stderr.strip() if result.stderr else ""
+    if result.returncode != 0:
+        logger.error(
+            "Pipeline %s failed with code %s. Stderr: %s",
+            script,
+            result.returncode,
+            stderr_text
+        )
+    return stdout_lines, stderr_text, result.returncode
 
 
 def parse_pipe_lines(lines):
@@ -14,7 +31,10 @@ def parse_pipe_lines(lines):
 
 
 def run_searching(query):
-    lines = run_pipeline("search_pipeline.py", query)
+    lines, stderr_text, returncode = run_pipeline("search_pipeline.py", query)
+    if returncode != 0:
+        logger.error("Search pipeline failed for query=%s. Stderr: %s", query, stderr_text)
+        return None
     search_results = []
     for line in lines:
         if "|||" in line:
@@ -24,7 +44,11 @@ def run_searching(query):
 
 
 def run_episode(url):
-    lines = parse_pipe_lines(run_pipeline("episode_pipeline.py", url))
+    lines, stderr_text, returncode = run_pipeline("episode_pipeline.py", url)
+    if returncode != 0:
+        logger.error("Episode pipeline failed for url=%s. Stderr: %s", url, stderr_text)
+        return None
+    lines = parse_pipe_lines(lines)
     episode_list = []
     for line in lines:
         number, ep_url = line.split("|||")
@@ -33,7 +57,11 @@ def run_episode(url):
 
 
 def run_download(urls):
-    lines = parse_pipe_lines(run_pipeline("download_pipeline.py", urls))
+    lines, stderr_text, returncode = run_pipeline("download_pipeline.py", urls)
+    if returncode != 0:
+        logger.error("Download pipeline failed for urls=%s. Stderr: %s", urls, stderr_text)
+        return None
+    lines = parse_pipe_lines(lines)
     downloads = []
     for line in lines:
         ep_page, download_url = line.split("|||")

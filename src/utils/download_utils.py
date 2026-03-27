@@ -1,12 +1,14 @@
 import subprocess
 from dotenv import load_dotenv
 import os
+import logging
 
 load_dotenv()
 
 DOWNLOAD_PATH = os.path.expanduser(os.getenv("DOWNLOAD_PATH", "./downloads"))
 
 os.makedirs(DOWNLOAD_PATH, exist_ok=True)
+logger = logging.getLogger(__name__)
 
 def download_with_aria2(url):
     try:
@@ -18,8 +20,8 @@ def download_with_aria2(url):
             "--summary-interval=1",           
             url
         ], check=True)  # raises exception if download fails
-    except subprocess.CalledProcessError as e:
-        print(f"Download failed for {url}: {e}")
+    except subprocess.CalledProcessError:
+        logger.exception("Download failed for %s", url)
 
 
 def download_with_wget(url):
@@ -31,5 +33,5 @@ def download_with_wget(url):
             "--progress=bar:force",
             url
         ], check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"Download failed for {url}: {e}")
+    except subprocess.CalledProcessError:
+        logger.exception("Download failed for %s", url)
