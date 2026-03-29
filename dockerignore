@@ -7,7 +7,9 @@ __pycache__/
 
 # Environment / secrets
 .env
-.env.*
+.env.local
+.env.production
+.env.test
 *.key
 *.pem
 
