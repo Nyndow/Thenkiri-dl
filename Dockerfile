@@ -14,19 +14,21 @@ RUN apt-get update \
 # create non-root user
 RUN useradd -m appuser
 
+# copy requirements first for better caching
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# copy app
 COPY . .
 
+# create required directories + fix permissions
 RUN mkdir -p /downloads /app/logs \
     && chown -R appuser:appuser /app /downloads
 
-# switch to non-root user
 USER appuser
 
-VOLUME ["/downloads"]
-
 WORKDIR /app/src
+
+VOLUME ["/downloads"]
 
 CMD ["python", "main.py"]
