@@ -23,6 +23,7 @@ COPY . .
 
 USER root
 RUN mkdir -p /downloads && chmod -R 777 /downloads
+RUN mkdir -p /app/logs && chmod -R 777 /app/logs
 
 USER appuser
 
