@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Environment / secrets
+.env
+.env.*
+*.key
+*.pem
+
+# Git
+.git/
+.gitignore
+
+# Virtual env
+venv/
+.venv/
+
+# Node (if any frontend exists)
+node_modules/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Local downloads / data
+downloads/
+data/
+
+# IDEs
+.vscode/
+.idea/

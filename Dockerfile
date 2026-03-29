@@ -6,16 +6,24 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
+# system dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends aria2 wget \
     && rm -rf /var/lib/apt/lists/*
+
+# create non-root user
+RUN useradd -m appuser
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p /downloads /app/logs
+RUN mkdir -p /downloads /app/logs \
+    && chown -R appuser:appuser /app /downloads
+
+# switch to non-root user
+USER appuser
 
 VOLUME ["/downloads"]
 
