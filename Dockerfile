@@ -21,9 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # copy app
 COPY . .
 
-# create required directories + fix permissions
-RUN mkdir -p /downloads /app/logs \
-    && chown -R appuser:appuser /app /downloads
+USER root
+RUN mkdir -p /downloads && chmod -R 777 /downloads
 
 USER appuser
 
