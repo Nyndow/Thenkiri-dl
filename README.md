@@ -60,7 +60,7 @@ docker run --rm -it thenkiri-dl
 
 To keep downloaded files and logs outside the container, mount local directories:
 ```bash
-docker run --rm -it \
+docker run -it \
   -v "$PWD/downloads:/downloads" \
   -v "$PWD/logs:/app/logs" \
   thenkiri-dl
@@ -68,7 +68,7 @@ docker run --rm -it \
 
 #### Override Docker environment variables
 ```bash
-docker run --rm -it \
+docker run -it \
   -e DOWNLOAD_PATH=/downloads \
   -e THENKIRI_LOG_PATH=/app/logs/thenkiri.log \
   -v "$PWD/downloads:/downloads" \
