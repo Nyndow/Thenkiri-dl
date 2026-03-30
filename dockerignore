@@ -5,17 +5,21 @@ __pycache__/
 *.pyd
 *.log
 
+assets/
+
 # Environment / secrets
 .env
 .env.local
 .env.production
 .env.test
+.env.example
 *.key
 *.pem
 
 # Git
 .git/
 .gitignore
+.github/
 
 snap-thenkiri-dl/
 
