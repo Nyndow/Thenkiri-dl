@@ -11,9 +11,6 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends aria2 wget \
     && rm -rf /var/lib/apt/lists/*
 
-# create non-root user
-RUN useradd -m appuser
-
 # copy requirements first for better caching
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -21,11 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # copy app
 COPY . .
 
-USER root
-RUN mkdir -p /downloads && chmod -R 777 /downloads
-RUN mkdir -p /app/logs && chmod -R 777 /app/logs
-
-USER appuser
+RUN mkdir -p /app/logs
 
 WORKDIR /app/src
 
