@@ -29,6 +29,4 @@ USER appuser
 
 WORKDIR /app/src
 
-VOLUME ["/downloads"]
-
 CMD ["python", "main.py"]
