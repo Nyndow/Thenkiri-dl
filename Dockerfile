@@ -6,19 +6,19 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# system dependencies
+# system dependencies + setup directories
 RUN apt-get update \
     && apt-get install -y --no-install-recommends aria2 wget \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /app/logs
 
 # copy requirements first for better caching
 COPY requirements.txt .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 # copy app
 COPY . .
-
-RUN mkdir -p /app/logs
 
 WORKDIR /app/src
 
