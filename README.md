@@ -37,7 +37,7 @@ docker run -it -v thenkiri_downloads:/downloads nyndow/thenkiri-dl:latest
 
 Access a shell inside the container:
 ```bash
-docker run -it --rm nyndow/thenkiri-dl:latest bash
+docker run -it nyndow/thenkiri-dl:latest bash
 ```
 
 ---
@@ -53,7 +53,7 @@ docker build -t thenkiri-dl .
 
 #### Run the container locally
 ```bash
-docker run --rm -it thenkiri-dl
+docker run -it thenkiri-dl
 ```
 
 #### Run with local download and log folders
