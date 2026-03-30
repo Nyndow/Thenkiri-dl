@@ -6,6 +6,7 @@ __pycache__/
 *.log
 
 assets/
+install.sh
 
 # Environment / secrets
 .env
