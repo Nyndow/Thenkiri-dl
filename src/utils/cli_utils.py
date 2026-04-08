@@ -22,8 +22,8 @@ def choose_from_search():
         site = questionary.select(
             "Which site do you want to search?",
             choices=[
-                questionary.Choice(title="Korean drama & movie", value="0"),
-                questionary.Choice(title="Chinese drama (dramakey.com)", value="1"),
+                questionary.Choice(title="Korean dramas & movies", value="0"),
+                questionary.Choice(title="Chinese dramas (dramakey.com)", value="1"),
             ]
         ).ask()
 
