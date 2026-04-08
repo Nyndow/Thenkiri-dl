@@ -5,11 +5,11 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-def run_pipeline(script, arg):
+def run_pipeline(script, *args):
     src_dir = Path(__file__).resolve().parent.parent
     script_path = src_dir / script
     result = subprocess.run(
-        [sys.executable, str(script_path), arg],
+        [sys.executable, str(script_path), *args],
         capture_output=True,
         text=True,
         cwd=str(src_dir)
@@ -25,13 +25,11 @@ def run_pipeline(script, arg):
         )
     return stdout_lines, stderr_text, result.returncode
 
-
 def parse_pipe_lines(lines):
     return [line for line in lines if "|||" in line]
 
-
-def run_searching(query):
-    lines, stderr_text, returncode = run_pipeline("search_pipeline.py", query)
+def run_searching(query, site="0"):
+    lines, stderr_text, returncode = run_pipeline("search_pipeline.py", query, site)
     if returncode != 0:
         logger.error("Search pipeline failed for query=%s. Stderr: %s", query, stderr_text)
         return None
@@ -41,7 +39,6 @@ def run_searching(query):
             title, url = line.split("|||")
             search_results.append({"title": title, "url": url})
     return search_results
-
 
 def run_episode(url):
     lines, stderr_text, returncode = run_pipeline("episode_pipeline.py", url)
@@ -54,7 +51,6 @@ def run_episode(url):
         number, ep_url = line.split("|||")
         episode_list.append({"number": number, "url": ep_url})
     return episode_list
-
 
 def run_download(urls):
     lines, stderr_text, returncode = run_pipeline("download_pipeline.py", urls)
