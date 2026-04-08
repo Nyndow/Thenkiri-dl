@@ -9,7 +9,7 @@ It uses **aria2** and/or **wget** to ensure fast and reliable downloads.
 
 ## Features
 
-- Search shows available on **Thenkiri**
+- Search shows available on **Thenkiri** and **Dramakey** 
 - Select episodes directly from the terminal
 - Download using **aria2** or **wget**
 - Resume interrupted downloads *(download links remain active for ~8 hours)*
