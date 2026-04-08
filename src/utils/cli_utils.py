@@ -19,8 +19,20 @@ def clear():
 def choose_from_search():
     try:
         clear()
+        site = questionary.select(
+            "Which site do you want to search?",
+            choices=[
+                questionary.Choice(title="Korean drama & movie", value="0"),
+                questionary.Choice(title="Chinese drama (dramakey.com)", value="1"),
+            ]
+        ).ask()
+
+        if not site:
+            print("No site selected.")
+            return None
+
         query = input("Search for a show: ")
-        search_results = run_searching(query)
+        search_results = run_searching(query, site)
 
         if search_results is None:
             print("Search failed. Check logs for details.")

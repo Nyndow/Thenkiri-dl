@@ -10,18 +10,17 @@ class CollectPipeline:
         results.append(item)
         return item
 
-def main(query):
+def main(query, site=0):
     settings = get_project_settings()
     settings.set("LOG_ENABLED", True)
     settings.set("ITEM_PIPELINES", {__name__ + ".CollectPipeline": 1})
-
     process = CrawlerProcess(settings)
-    process.crawl(SearchingSpider, query=query)
-    process.start()  
-
+    process.crawl(SearchingSpider, query=query, site=site)
+    process.start()
     for r in results:
         print(f"{r.title}|||{r.url}")
 
 if __name__ == "__main__":
     query = sys.argv[1]
-    main(query)
+    site = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+    main(query, site)
