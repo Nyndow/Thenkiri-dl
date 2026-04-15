@@ -106,11 +106,14 @@ def choose_episodes(selected):
 
         else:
             choices = [
+                questionary.Choice(title="Select All", value="__all__")
+            ] + [
                 questionary.Choice(title=f"Episode {ep['number']}", value=ep["url"])
                 for ep in episode_list
             ]
+
             selected_episode_urls = questionary.checkbox(
-                "Select episodes (use SPACE to select multiple):",
+                "Select episodes (SPACE to select):",
                 choices=choices
             ).ask()
 
@@ -118,12 +121,17 @@ def choose_episodes(selected):
                 print("No episodes selected.")
                 return []
 
-            episode_urls = ",".join(selected_episode_urls)
+            if "__all__" in selected_episode_urls:
+                episode_urls = ",".join(ep["url"] for ep in episode_list)
+            else:
+                episode_urls = ",".join(selected_episode_urls)
 
         downloads = run_download(episode_urls)
+
         if downloads is None:
             print("Download lookup failed. Check logs for details.")
             return []
+
         return downloads
 
     except Exception:
