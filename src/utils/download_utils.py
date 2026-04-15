@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 import os
 import logging
 
+from utils.settings_utils import load_settings
+
 load_dotenv()
 
 raw_path = os.getenv("DOWNLOAD_PATH", "./downloads")
@@ -17,8 +19,11 @@ def ask_user(prompt: str) -> bool:
     return answer in ["y", "yes"]
 
 
-# aria2 download
-def download_with_aria2(url, insecure=False):
+def download_with_aria2(url, insecure=None):
+    settings = load_settings()
+    if insecure is None:
+        insecure = settings.get("no_certificate_check", False)
+
     cmd = [
         "aria2c",
         "--dir", DOWNLOAD_PATH,
@@ -34,6 +39,7 @@ def download_with_aria2(url, insecure=False):
 
     try:
         subprocess.run(cmd, check=True)
+
     except subprocess.CalledProcessError:
         logger.exception("aria2 download failed for %s", url)
 
@@ -44,13 +50,16 @@ def download_with_aria2(url, insecure=False):
                 download_with_aria2(url, insecure=True)
 
 
-# wget download
-def download_with_wget(url, insecure=False):
+def download_with_wget(url, insecure=None):
+    settings = load_settings()
+    if insecure is None:
+        insecure = settings.get("no_certificate_check", False)
+
     cmd = [
         "wget",
         "-c",
         "-P", DOWNLOAD_PATH,
-        "--progress=bar:force",
+        "--progress=bar:force:noscroll",
     ]
 
     if insecure:
@@ -59,12 +68,12 @@ def download_with_wget(url, insecure=False):
     cmd.append(url)
 
     try:
-        subprocess.run(cmd, check=True, capture_output=True, text=True)
+        subprocess.run(cmd, check=True)
 
     except subprocess.CalledProcessError as e:
         logger.exception("wget download failed for %s", url)
 
-        error_text = (e.stderr or "").lower()
+        error_text = (e.stderr or "").lower() if e.stderr else ""
         is_ssl_error = "certificate" in error_text or "ssl" in error_text
 
         if is_ssl_error and not insecure:

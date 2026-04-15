@@ -3,6 +3,7 @@ import logging
 import questionary
 from utils.pipeline_utils import run_searching, run_episode, run_download
 from utils.download_utils import download_with_aria2, download_with_wget
+from utils.settings_utils import settings_cli
 
 LOG_PATH = os.path.expanduser(os.getenv("THENKIRI_LOG_PATH", "./logs/thenkiri.log"))
 os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
@@ -18,47 +19,62 @@ def clear():
 
 def choose_from_search():
     try:
-        clear()
-        site = questionary.select(
-            "Which site do you want to search?",
-            choices=[
-                questionary.Choice(title="Korean dramas & movies", value="0"),
-                questionary.Choice(title="Chinese dramas (dramakey.com)", value="1"),
-            ]
-        ).ask()
+        while True:
+            clear()
 
-        if not site:
-            print("No site selected.")
-            return None
+            site = questionary.select(
+                "What do you want to do?",
+                choices=[
+                    questionary.Choice(title="Korean dramas & movies", value="0"),
+                    questionary.Choice(title="Chinese dramas (dramakey.com)", value="1"),
+                    questionary.Choice(title="Settings", value="settings"),
+                    questionary.Choice(title="Exit", value="exit"),
+                ]
+            ).ask()
 
-        query = input("Search for a show: ")
-        search_results = run_searching(query, site)
+            if not site:
+                print("No selection made.")
+                return None
+            
+            if site == "exit":
+                return None
 
-        if search_results is None:
-            print("Search failed. Check logs for details.")
-            return None
+            if site == "settings":
+                settings_cli()
+                continue
 
-        if not search_results:
-            print(f"No results found for: {query}")
-            return None
+            query = input("Search for a show: ")
+            search_results = run_searching(query, site)
 
-        print("\nResults:\n")
-        choices = [r["title"] for r in search_results]
+            if search_results is None:
+                print("Search failed. Check logs for details.")
+                input("\nPress Enter to continue...")
+                continue
 
-        selected_title = questionary.select(
-            "Choose result:",
-            choices=choices
-        ).ask()
+            if not search_results:
+                print(f"No results found for: {query}")
+                input("\nPress Enter to continue...")
+                continue
 
-        if not selected_title:
-            print("No selection made.")
-            return None
+            print("\nResults:\n")
+            choices = [r["title"] for r in search_results]
 
-        selected = next(r for r in search_results if r["title"] == selected_title)
-        print(f"\nSelected: {selected['title']}")
-        print(selected["url"])
-        return selected
+            selected_title = questionary.select(
+                "Choose result:",
+                choices=choices
+            ).ask()
 
+            if not selected_title:
+                print("No selection made.")
+                input("\nPress Enter to continue...")
+                continue
+
+            selected = next(r for r in search_results if r["title"] == selected_title)
+
+            print(f"\nSelected: {selected['title']}")
+            print(selected["url"])
+
+            return selected
     except Exception:
         logger.exception("Error during search")
         return None

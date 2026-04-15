@@ -113,6 +113,9 @@ python main.py
 ### Download by choosing wget or aria2
 ![Choosing download method](assets/download.png)
 
+### Setting 
+If you encounter an error requiring a certificate, update yours or disable ssl from the setting (be aware of the risks)
+
 ---
 
 ## Disclaimer
