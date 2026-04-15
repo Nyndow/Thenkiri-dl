@@ -23,7 +23,7 @@ Choose the installation method that fits your environment.
 
 ---
 
-### 🐳 Docker Hub image
+### 🐳 Docker Hub image ( Recommended )
 
 Pull the published image from Docker Hub:
 ```bash
@@ -32,7 +32,7 @@ docker pull nyndow/thenkiri-dl:latest
 
 Run it with a named volume for downloads:
 ```bash
-docker run -it -v thenkiri_downloads:/downloads nyndow/thenkiri-dl:latest
+docker run -it -v "$(pwd)/thenkiri_downloads:/downloads" nyndow/thenkiri-dl:latest
 ```
 
 Access a shell inside the container:
