@@ -52,7 +52,10 @@ def download_with_aria2(url, folder_name=None, insecure=None):
         "--dir", target_dir,
         "-x", "3",
         "-s", "3",
-        "--summary-interval=1",
+
+        "--summary-interval=0",
+        "--console-log-level=notice",
+        "--download-result=hide",
     ]
 
     if insecure:
