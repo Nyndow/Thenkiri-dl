@@ -14,6 +14,7 @@ It uses **aria2** and/or **wget** to ensure fast and reliable downloads.
 - Download using **aria2** or **wget**
 - Resume interrupted downloads *(download links remain active for ~8 hours)*
 - Simple CLI interface
+- Setting option to choose certificate checking state
 
 ---
 
