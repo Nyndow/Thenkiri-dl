@@ -8,6 +8,10 @@ class DownloadSpider(scrapy.Spider):
         super().__init__(*args, **kwargs)
         self.urls = urls.split(",") if urls else []
 
+    async def start(self):
+        for url in self.urls:
+            yield scrapy.Request(url, callback=self.parse_page)
+
     def start_requests(self):
         for url in self.urls:
             yield scrapy.Request(url, callback=self.parse_page)
