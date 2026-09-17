@@ -48,7 +48,8 @@ docker run -it \
 
 ### 🛠️ Manual installation
 
-Make sure you have **aria2** and/or **wget** installed on your system.
+#### ❗❗ Requirements
+**aria2** and/or **wget** are required to be installed on your system.
 
 #### Clone the repository
 ```bash
