@@ -52,11 +52,6 @@ This project includes a `Dockerfile` so you can run Thenkiri-dl without installi
 docker build -t thenkiri-dl .
 ```
 
-#### Run the container locally
-```bash
-docker run -it thenkiri-dl
-```
-
 #### Run with local download and log folders
 
 To keep downloaded files and logs outside the container, mount local directories:
