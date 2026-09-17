@@ -24,49 +24,21 @@ Choose the installation method that fits your environment.
 
 ---
 
-### 🐳 Docker Hub image ( Recommended )
+### 🐳 Docker (Recommended)
 
-Pull the published image from Docker Hub:
+Pull and run — downloaded videos and logs land in `./downloads` and `./logs`:
 ```bash
 docker pull nyndow/thenkiri-dl:latest
-```
-
-Run it with a named volume for downloads:
-```bash
-docker run -it -v "$(pwd)/thenkiri_downloads:/downloads" nyndow/thenkiri-dl:latest
-```
-
-Access a shell inside the container:
-```bash
-docker run -it nyndow/thenkiri-dl:latest bash
-```
-
----
-
-### 🔧 Local Docker installation
-
-This project includes a `Dockerfile` so you can run Thenkiri-dl without installing Python or dependencies locally.
-
-#### Build the Docker image locally
-```bash
-docker build -t thenkiri-dl .
-```
-
-#### Run with local download and log folders
-
-To keep downloaded files and logs outside the container, mount local directories:
-```bash
 docker run -it \
   -v "$PWD/downloads:/downloads" \
   -v "$PWD/logs:/app/logs" \
-  thenkiri-dl
+  nyndow/thenkiri-dl:latest
 ```
 
-#### Override Docker environment variables
+Prefer to build the image yourself instead of pulling from Docker Hub?
 ```bash
+docker build -t thenkiri-dl .
 docker run -it \
-  -e DOWNLOAD_PATH=/downloads \
-  -e THENKIRI_LOG_PATH=/app/logs/thenkiri.log \
   -v "$PWD/downloads:/downloads" \
   -v "$PWD/logs:/app/logs" \
   thenkiri-dl
