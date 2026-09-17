@@ -9,6 +9,9 @@ __pycache__/
 install.ps1
 install.sh
 
+# Downloaded videos
+downloads/
+
 # C extensions
 *.so
 
