@@ -28,17 +28,23 @@ def run_pipeline(script, *args):
 def parse_pipe_lines(lines):
     return [line for line in lines if "|||" in line]
 
-def run_searching(query, site="0"):
-    lines, stderr_text, returncode = run_pipeline("search_pipeline.py", query, site)
+def _parse_search_output(lines):
+    search_results = []
+    has_next = False
+    for line in lines:
+        if line.startswith("RESULT|||"):
+            _, title, url = line.split("|||", 2)
+            search_results.append({"title": title, "url": url})
+        elif line.startswith("HASNEXT|||"):
+            has_next = line.split("|||", 1)[1].strip().lower() == "true"
+    return search_results, has_next
+
+def run_searching(query, site="0", page=1):
+    lines, stderr_text, returncode = run_pipeline("search_pipeline.py", query, str(site), str(page))
     if returncode != 0:
         logger.error("Search pipeline failed for query=%s. Stderr: %s", query, stderr_text)
-        return None
-    search_results = []
-    for line in lines:
-        if "|||" in line:
-            title, url = line.split("|||")
-            search_results.append({"title": title, "url": url})
-    return search_results
+        return None, False
+    return _parse_search_output(lines)
 
 def run_episode(url):
     lines, stderr_text, returncode = run_pipeline("episode_pipeline.py", url)

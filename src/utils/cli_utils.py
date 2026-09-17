@@ -48,31 +48,62 @@ def choose_from_search():
                 continue
 
             query = input("Search for a show: ")
-            search_results = run_searching(query, site)
 
-            if not search_results:
-                print("No results found.")
-                input("\nPress Enter...")
-                continue
+            page = 1
+            page_cache = {}
+            found_any = False
 
-            print("\nResults:\n")
+            while True:
+                if page not in page_cache:
+                    search_results, has_next = run_searching(query, site, page)
 
-            choices = [r["title"] for r in search_results]
+                    if search_results is None:
+                        print("Search failed. Check the logs for details.")
+                        input("\nPress Enter...")
+                        break
 
-            selected_title = questionary.select(
-                "Choose result:",
-                choices=choices
-            ).ask()
+                    page_cache[page] = (search_results, has_next)
 
-            if not selected_title:
-                return None
+                search_results, has_next = page_cache[page]
+                found_any = found_any or bool(search_results)
 
-            selected = next(r for r in search_results if r["title"] == selected_title)
+                if not found_any:
+                    print("No results found.")
+                    input("\nPress Enter...")
+                    break
 
-            print(f"\nSelected: {selected['title']}")
-            print(selected["url"])
+                print(f"\nResults (page {page}):\n")
 
-            return selected
+                choices = [r["title"] for r in search_results]
+                if page > 1:
+                    choices.append(questionary.Choice(title="◂ Previous page", value="__prev_page__"))
+                if has_next:
+                    choices.append(questionary.Choice(title="Next page ▸", value="__next_page__"))
+
+                selected_title = questionary.select(
+                    "Choose result:",
+                    choices=choices
+                ).ask()
+
+                if not selected_title:
+                    return None
+
+                if selected_title == "__next_page__":
+                    page += 1
+                    continue
+
+                if selected_title == "__prev_page__":
+                    page -= 1
+                    continue
+
+                selected = next(r for r in search_results if r["title"] == selected_title)
+
+                print(f"\nSelected: {selected['title']}")
+                print(selected["url"])
+
+                return selected
+
+            continue
 
     except Exception:
         logger.exception("Error during search")
